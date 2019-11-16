@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<h2 th:text="${fileName}" style="color: red"></h2>
+<p>
+    <a th:href="@{/toUpload}">upload</a>
+    <a href="#">regist</a>
+    <a th:href="@{/list}">view</a>
+</p>
+<p th:if="${images!=null}">
+
+<img th:src="'/image/'+${fileName}">
+</p>
+</body>
+</html>
