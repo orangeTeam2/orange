@@ -3,6 +3,7 @@ package com.lhb.springboot.controller;
 import com.lhb.springboot.entity.Images;
 import com.lhb.springboot.mapper.ImageMapper;
 import com.lhb.springboot.utils.FileUtils;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,16 @@ public class UploadController {
     @PostMapping("/up")
     public String upload(@RequestParam("file") MultipartFile file, Map<String, Object> map,Images images){
 
+
         // 要上传的目标文件存放路径
         String localPath = "E:/Develop/Files/Photos";
+        String compressPath = "E:/Develop/Files/comp";
         // 上传成功或者失败的提示
         String msg = "";
+        File file11 = new File(compressPath);
+        if (!file11.exists()) {
+            file11.mkdirs();
+        }
 
         File file1 = new File(localPath);
         if (!file1.exists()) {
@@ -57,9 +64,19 @@ public class UploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            Thumbnails.of(localPath+"/"+file.getOriginalFilename())
+                    .scale(0.25f)
+                    .toFile(compressPath+"/"+file.getOriginalFilename().split(".")[0]+"_25%.jpg");
+            FileUtils.saveImg(file,compressPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         images.setImg_name(file.getOriginalFilename());
         images.setImg_uuid(UUID.randomUUID().toString());
         images.setImg_url(localPath);
+        images.setImg_zipurl(compressPath);
         imageMapper.uploadImage(images);
         // 显示图片
         map.put("msg", msg);
