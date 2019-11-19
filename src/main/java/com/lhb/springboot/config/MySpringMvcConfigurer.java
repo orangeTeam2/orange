@@ -48,6 +48,7 @@ public class MySpringMvcConfigurer {
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/image/**").addResourceLocations("file:E:/Develop/Files/Photos/");
+                registry.addResourceHandler("/compress/**").addResourceLocations("file:E:/Develop/Files/comp/");
             }
         };
 

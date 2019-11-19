@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,10 +65,12 @@ public class UploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String[] str = StringUtils.split(file.getOriginalFilename(),".");
+        String compressImg=str[0]+"_25.jpg";
         try {
             Thumbnails.of(localPath+"/"+file.getOriginalFilename())
                     .scale(0.25f)
-                    .toFile(compressPath+"/"+file.getOriginalFilename().split(".")[0]+"_25%.jpg");
+                    .toFile(compressPath+"/"+compressImg);
             FileUtils.saveImg(file,compressPath);
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +79,7 @@ public class UploadController {
         images.setImg_name(file.getOriginalFilename());
         images.setImg_uuid(UUID.randomUUID().toString());
         images.setImg_url(localPath);
-        images.setImg_zipurl(compressPath);
+        images.setImg_zipurl(compressImg);
         imageMapper.uploadImage(images);
         // 显示图片
         map.put("msg", msg);

@@ -9,12 +9,12 @@
     <tr>
         <td>图片编号</td>
         <td>图片名称</td>
-        <td>图片路径</td>
+        <td>预览</td>
     </tr>
     <tr th:each="a:${all}">
         <td th:text="${a.getImg_uuid()}"></td>
-        <td th:text="${a.getImg_name()}"></td>
-        <td th:text="${a.getImg_url()}"></td>
+        <td><a th:text="${a.getImg_name()}" th:href="@{/download}+'?img_name='+${a.getImg_name()}"></a></td>
+        <td ><img th:src="'/compress/'+${a.getImg_zipurl()}"/></td>
     </tr>
     <tr th:if="${all.isEmpty()}">
         <td colspan="3" style="text-align: center">暂无数据...</td>
